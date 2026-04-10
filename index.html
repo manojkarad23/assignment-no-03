@@ -1,0 +1,1977 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#16a34a" />
+    <title>Smart AgroTech: IoT Based Smart Irrigation System</title>
+
+    <style>
+      :root {
+        --bg: #ffffff;
+        --surface: #f6f7f8;
+        --surface-2: #eef6f0;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: rgba(15, 23, 42, 0.1);
+        --shadow: 0 20px 40px rgba(2, 6, 23, 0.08);
+
+        --green-900: #052e16;
+        --green-800: #14532d;
+        --green-700: #166534;
+        --green-600: #16a34a;
+        --green-500: #22c55e;
+        --green-200: #bbf7d0;
+
+        --radius: 18px;
+        --radius-sm: 14px;
+
+        --container: 1120px;
+        --nav-h: 74px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica,
+          Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        color: var(--text);
+        background: radial-gradient(1100px 500px at 10% 0%, rgba(34, 197, 94, 0.12), transparent 60%),
+          radial-gradient(900px 500px at 90% 0%, rgba(22, 163, 74, 0.12), transparent 55%),
+          var(--bg);
+        line-height: 1.55;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      .container {
+        width: min(var(--container), calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      /* -----------------------
+         Navbar
+      ------------------------*/
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        height: var(--nav-h);
+        backdrop-filter: blur(12px);
+        background: rgba(255, 255, 255, 0.72);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .nav-inner {
+        height: var(--nav-h);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 800;
+        letter-spacing: 0.2px;
+      }
+
+      .brand-badge {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--green-600), var(--green-800));
+        box-shadow: 0 14px 30px rgba(22, 163, 74, 0.25);
+        display: grid;
+        place-items: center;
+        color: #fff;
+        flex: none;
+      }
+
+      .brand-badge svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .nav-links a {
+        font-size: 14px;
+        color: var(--muted);
+        padding: 10px 10px;
+        border-radius: 12px;
+        transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+      }
+
+      .nav-links a:hover {
+        background: rgba(34, 197, 94, 0.12);
+        color: var(--green-800);
+        transform: translateY(-1px);
+      }
+
+      .nav-cta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .pill {
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        font-size: 12px;
+        color: var(--muted);
+        background: rgba(255, 255, 255, 0.6);
+        display: none;
+      }
+
+      .hamburger {
+        display: none;
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.7);
+        cursor: pointer;
+        transition: transform 160ms ease, background 160ms ease;
+        position: relative;
+      }
+      .hamburger:hover {
+        background: rgba(34, 197, 94, 0.10);
+        transform: translateY(-1px);
+      }
+      .hamburger span {
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        height: 2px;
+        background: var(--green-800);
+        border-radius: 2px;
+        transition: transform 200ms ease, top 200ms ease, opacity 200ms ease;
+      }
+      .hamburger span:nth-child(1) {
+        top: 14px;
+      }
+      .hamburger span:nth-child(2) {
+        top: 20px;
+      }
+      .hamburger span:nth-child(3) {
+        top: 26px;
+      }
+      .nav.is-open .hamburger span:nth-child(1) {
+        top: 20px;
+        transform: rotate(45deg);
+      }
+      .nav.is-open .hamburger span:nth-child(2) {
+        opacity: 0;
+      }
+      .nav.is-open .hamburger span:nth-child(3) {
+        top: 20px;
+        transform: rotate(-45deg);
+      }
+
+      .mobile-drawer {
+        display: none;
+        position: absolute;
+        top: var(--nav-h);
+        left: 0;
+        right: 0;
+        border-bottom: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(12px);
+      }
+      .mobile-drawer-inner {
+        padding: 14px 0 18px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+      .mobile-drawer a {
+        padding: 12px 12px;
+        border-radius: 14px;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        background: rgba(246, 247, 248, 0.8);
+        color: var(--green-900);
+        font-size: 14px;
+        transition: transform 180ms ease, background 180ms ease;
+      }
+      .mobile-drawer a:hover {
+        background: rgba(34, 197, 94, 0.10);
+        transform: translateY(-1px);
+      }
+
+      /* -----------------------
+         Global section styling
+      ------------------------*/
+      main {
+        padding-bottom: 40px;
+      }
+
+      section {
+        padding: 64px 0;
+        scroll-margin-top: calc(var(--nav-h) + 16px);
+      }
+
+      .section-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+
+      .kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(34, 197, 94, 0.25);
+        background: rgba(187, 247, 208, 0.35);
+        color: var(--green-800);
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        font-size: 12px;
+      }
+
+      .kicker .dot {
+        width: 8px;
+        height: 8px;
+        background: var(--green-600);
+        border-radius: 50%;
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        line-height: 1.1;
+      }
+
+      h1 {
+        font-size: clamp(30px, 4.4vw, 54px);
+        letter-spacing: -0.5px;
+      }
+
+      h2 {
+        font-size: clamp(22px, 3vw, 34px);
+        letter-spacing: -0.3px;
+      }
+
+      p {
+        margin: 10px 0 0;
+        color: var(--muted);
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        gap: 16px;
+      }
+
+      .grid.cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid.cols-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(15, 23, 42, 0.09);
+        border-radius: var(--radius);
+        box-shadow: 0 16px 32px rgba(2, 6, 23, 0.05);
+        padding: 18px;
+        position: relative;
+        overflow: hidden;
+        transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+      }
+
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 22px 48px rgba(2, 6, 23, 0.10);
+        border-color: rgba(34, 197, 94, 0.22);
+      }
+
+      .card .shine {
+        position: absolute;
+        inset: -40px -60px auto auto;
+        width: 180px;
+        height: 180px;
+        background: radial-gradient(circle at 30% 30%, rgba(34, 197, 94, 0.28), transparent 55%);
+        filter: blur(2px);
+        transform: rotate(15deg);
+        pointer-events: none;
+      }
+
+      .icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        background: linear-gradient(135deg, var(--green-600), var(--green-800));
+        box-shadow: 0 16px 30px rgba(22, 163, 74, 0.22);
+        margin-bottom: 12px;
+      }
+
+      .icon svg {
+        width: 22px;
+        height: 22px;
+      }
+
+      .btn-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 18px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        border-radius: 14px;
+        border: 1px solid rgba(15, 23, 42, 0.10);
+        background: rgba(255, 255, 255, 0.8);
+        color: var(--green-900);
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease,
+          border-color 180ms ease;
+        user-select: none;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 18px 32px rgba(2, 6, 23, 0.10);
+        border-color: rgba(34, 197, 94, 0.25);
+      }
+
+      .btn.primary {
+        background: linear-gradient(135deg, var(--green-600), var(--green-800));
+        border-color: rgba(22, 163, 74, 0.55);
+        color: #fff;
+      }
+
+      .btn.primary:hover {
+        box-shadow: 0 20px 46px rgba(22, 163, 74, 0.24);
+      }
+
+      .btn .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: currentColor;
+        opacity: 0.8;
+      }
+
+      .chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .chip {
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: rgba(34, 197, 94, 0.10);
+        border: 1px solid rgba(34, 197, 94, 0.22);
+        color: var(--green-800);
+        font-weight: 700;
+        font-size: 12px;
+      }
+
+      .divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.12), transparent);
+        margin: 16px 0 0;
+      }
+
+      /* -----------------------
+         Hero
+      ------------------------*/
+      .hero {
+        padding: 56px 0 28px;
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1.3fr 0.7fr;
+        gap: 18px;
+        align-items: stretch;
+      }
+
+      .hero-card {
+        border-radius: 28px;
+        padding: 26px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(246, 247, 248, 0.65));
+        border: 1px solid rgba(15, 23, 42, 0.10);
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-card::before {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        background: radial-gradient(800px 320px at 15% 0%, rgba(34, 197, 94, 0.25), transparent 60%),
+          radial-gradient(700px 340px at 85% 10%, rgba(22, 163, 74, 0.20), transparent 55%);
+        pointer-events: none;
+      }
+
+      .hero-card > * {
+        position: relative;
+      }
+
+      .hero p {
+        font-size: 16px;
+        max-width: 62ch;
+      }
+
+      .hero-metrics {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .metric {
+        border-radius: 22px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.75);
+        border: 1px solid rgba(15, 23, 42, 0.09);
+        box-shadow: 0 18px 38px rgba(2, 6, 23, 0.06);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .metric strong {
+        display: block;
+        font-size: 22px;
+        letter-spacing: -0.2px;
+      }
+
+      .metric span {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .meter {
+        margin-top: 12px;
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.08);
+        overflow: hidden;
+      }
+
+      .meter > div {
+        height: 100%;
+        width: 60%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--green-500), var(--green-700));
+      }
+
+      /* -----------------------
+         System design diagram
+      ------------------------*/
+      .diagram {
+        display: grid;
+        grid-template-columns: 1fr 0.8fr 1fr;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .node {
+        padding: 16px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.76);
+        border: 1px solid rgba(15, 23, 42, 0.09);
+        box-shadow: 0 16px 30px rgba(2, 6, 23, 0.05);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .node h3 {
+        font-size: 16px;
+      }
+
+      .node p {
+        margin-top: 8px;
+        font-size: 13px;
+      }
+
+      .diagram-mid {
+        display: grid;
+        gap: 14px;
+      }
+
+      .connector {
+        height: 2px;
+        background: linear-gradient(90deg, rgba(34, 197, 94, 0.10), rgba(22, 163, 74, 0.55), rgba(34, 197, 94, 0.10));
+        border-radius: 999px;
+        position: relative;
+      }
+
+      .connector::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        transform: translateY(-50%);
+        background: var(--green-600);
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.15);
+      }
+
+      .connector.rev::after {
+        left: 0;
+        right: auto;
+      }
+
+      /* -----------------------
+         Steps list
+      ------------------------*/
+      .steps {
+        display: grid;
+        gap: 12px;
+      }
+
+      .step {
+        display: grid;
+        grid-template-columns: 44px 1fr;
+        gap: 12px;
+        align-items: start;
+        padding: 14px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.70);
+        border: 1px solid rgba(15, 23, 42, 0.09);
+        transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+      }
+
+      .step:hover {
+        transform: translateY(-2px);
+        border-color: rgba(34, 197, 94, 0.22);
+        box-shadow: 0 18px 36px rgba(2, 6, 23, 0.08);
+      }
+
+      .step-num {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: rgba(34, 197, 94, 0.14);
+        border: 1px solid rgba(34, 197, 94, 0.22);
+        display: grid;
+        place-items: center;
+        font-weight: 900;
+        color: var(--green-800);
+      }
+
+      .step h3 {
+        font-size: 16px;
+      }
+
+      .step p {
+        margin-top: 6px;
+        font-size: 13px;
+      }
+
+      /* -----------------------
+         Dashboard
+      ------------------------*/
+      .dash {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 16px;
+        align-items: stretch;
+      }
+
+      .dash-panel {
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(15, 23, 42, 0.10);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .dash-top {
+        padding: 16px 16px 14px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+        background: linear-gradient(180deg, rgba(187, 247, 208, 0.35), rgba(255, 255, 255, 0.0));
+      }
+
+      .dash-top h3 {
+        font-size: 16px;
+        letter-spacing: -0.1px;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        background: rgba(255, 255, 255, 0.8);
+        font-weight: 800;
+        font-size: 12px;
+      }
+
+      .status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #94a3b8;
+        box-shadow: 0 0 0 6px rgba(148, 163, 184, 0.16);
+      }
+
+      .status-pill.on {
+        border-color: rgba(34, 197, 94, 0.30);
+      }
+      .status-pill.on .status-dot {
+        background: var(--green-600);
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.16);
+      }
+
+      .dash-body {
+        padding: 16px;
+        display: grid;
+        gap: 14px;
+      }
+
+      .reading-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .reading {
+        padding: 14px;
+        border-radius: 18px;
+        background: rgba(246, 247, 248, 0.75);
+        border: 1px solid rgba(15, 23, 42, 0.08);
+      }
+
+      .reading .label {
+        font-size: 12px;
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .reading .value {
+        margin-top: 6px;
+        font-size: 26px;
+        font-weight: 900;
+        letter-spacing: -0.4px;
+        color: var(--green-900);
+      }
+
+      .reading .sub {
+        margin-top: 2px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .gauge {
+        height: 12px;
+        border-radius: 999px;
+        background: rgba(15, 23, 42, 0.10);
+        overflow: hidden;
+        margin-top: 10px;
+      }
+      .gauge > div {
+        height: 100%;
+        width: 0%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #f59e0b, var(--green-500), var(--green-700));
+        transition: width 450ms ease;
+      }
+
+      .dash-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .mini {
+        padding: 10px 12px;
+        border-radius: 14px;
+        font-weight: 800;
+        font-size: 13px;
+      }
+
+      .btn.danger {
+        background: rgba(239, 68, 68, 0.08);
+        border-color: rgba(239, 68, 68, 0.22);
+        color: #991b1b;
+      }
+
+      .btn.success {
+        background: rgba(34, 197, 94, 0.12);
+        border-color: rgba(34, 197, 94, 0.26);
+        color: var(--green-800);
+      }
+
+      .dash-log {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+          "Courier New", monospace;
+        font-size: 12px;
+        color: #0f172a;
+        background: rgba(2, 6, 23, 0.04);
+        border: 1px solid rgba(2, 6, 23, 0.08);
+        border-radius: 18px;
+        padding: 12px;
+        max-height: 210px;
+        overflow: auto;
+      }
+
+      .log-line {
+        margin: 0;
+        color: rgba(2, 6, 23, 0.78);
+      }
+      .log-line .t {
+        color: rgba(71, 85, 105, 0.95);
+      }
+
+      /* -----------------------
+         Footer
+      ------------------------*/
+      footer {
+        padding: 26px 0 34px;
+        border-top: 1px solid rgba(15, 23, 42, 0.10);
+        background: linear-gradient(180deg, transparent, rgba(187, 247, 208, 0.15));
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 14px;
+        align-items: start;
+      }
+
+      .footer-card {
+        border-radius: 22px;
+        padding: 18px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(15, 23, 42, 0.09);
+        box-shadow: 0 16px 30px rgba(2, 6, 23, 0.05);
+      }
+
+      .tiny {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+
+      /* -----------------------
+         Reveal animations
+      ------------------------*/
+      .reveal {
+        opacity: 0;
+        transform: translateY(14px);
+        transition: opacity 680ms ease, transform 680ms ease;
+      }
+
+      .reveal.in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* -----------------------
+         Responsive
+      ------------------------*/
+      @media (max-width: 980px) {
+        .grid.cols-3 {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .diagram {
+          grid-template-columns: 1fr;
+        }
+        .connector {
+          display: none;
+        }
+        .dash {
+          grid-template-columns: 1fr;
+        }
+        .hero-grid {
+          grid-template-columns: 1fr;
+        }
+        .pill {
+          display: inline-flex;
+        }
+        .nav-links {
+          display: none;
+        }
+        .hamburger {
+          display: inline-block;
+        }
+        .nav.is-open .mobile-drawer {
+          display: block;
+        }
+      }
+
+      @media (max-width: 620px) {
+        section {
+          padding: 54px 0;
+        }
+        .grid.cols-2,
+        .grid.cols-3 {
+          grid-template-columns: 1fr;
+        }
+        .reading-row {
+          grid-template-columns: 1fr;
+        }
+        .footer-grid {
+          grid-template-columns: 1fr;
+        }
+        .mobile-drawer-inner {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        * {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="nav" id="top">
+      <div class="container nav-inner">
+        <a class="brand" href="#home" aria-label="Go to top">
+          <span class="brand-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M7 14c3-1 7-4 10-9 1 10-5 15-10 16-3 1-5-2-5-5 0-2 2-3 5-2Z"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          <span>Smart AgroTech</span>
+          <span class="pill">IoT Smart Irrigation</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Page navigation">
+          <a href="#overview">Overview</a>
+          <a href="#problem">Problem</a>
+          <a href="#solution">Solution</a>
+          <a href="#objectives">Objectives</a>
+          <a href="#features">Features</a>
+          <a href="#design">System Design</a>
+          <a href="#working">Working</a>
+          <a href="#algorithm">Algorithm</a>
+          <a href="#dashboard">Dashboard</a>
+          <a href="#usecases">Use Cases</a>
+          <a href="#future">Future</a>
+          <a href="#conclusion">Conclusion</a>
+        </nav>
+
+        <div class="nav-cta">
+          <button class="hamburger" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+        </div>
+      </div>
+
+      <div class="mobile-drawer" id="mobileDrawer" aria-label="Mobile menu">
+        <div class="container mobile-drawer-inner">
+          <a href="#overview">Project Overview</a>
+          <a href="#problem">Problem Statement</a>
+          <a href="#solution">Proposed Solution</a>
+          <a href="#objectives">Objectives</a>
+          <a href="#features">Features</a>
+          <a href="#design">System Design</a>
+          <a href="#working">Working / Methodology</a>
+          <a href="#algorithm">Algorithm</a>
+          <a href="#dashboard">Live Dashboard</a>
+          <a href="#usecases">Use Cases</a>
+          <a href="#future">Future Scope</a>
+          <a href="#conclusion">Conclusion</a>
+          <a href="#footer">Footer</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- 1) Hero -->
+      <section class="hero" id="home">
+        <div class="container hero-grid">
+          <div class="hero-card reveal">
+            <span class="kicker"><span class="dot"></span> College Project Frontend</span>
+            <h1 style="margin-top: 14px">
+              Smart AgroTech: <br />
+              IoT Based Smart Irrigation System
+            </h1>
+            <p>
+              A modern, sensor-driven irrigation approach to save water, reduce manual effort, and
+              improve crop health using real-time soil moisture monitoring and automated pump control.
+            </p>
+
+            <div class="btn-row">
+              <a class="btn primary" href="#dashboard">
+                <span class="dot" aria-hidden="true"></span>
+                View Live Dashboard
+              </a>
+              <a class="btn" href="#overview">Explore Sections</a>
+            </div>
+
+            <div class="chip-row" aria-label="Highlights">
+              <span class="chip">Water Saving</span>
+              <span class="chip">Real-time Monitoring</span>
+              <span class="chip">Automation</span>
+              <span class="chip">Mobile Friendly</span>
+            </div>
+          </div>
+
+          <div class="hero-metrics">
+            <div class="metric reveal">
+              <strong>Soil Moisture</strong>
+              <span>Continuous sensing & threshold-based control</span>
+              <div class="meter" aria-hidden="true"><div style="width: 78%"></div></div>
+            </div>
+            <div class="metric reveal">
+              <strong>Smart Pump</strong>
+              <span>Manual override + safety status indicators</span>
+              <div class="meter" aria-hidden="true"><div style="width: 64%"></div></div>
+            </div>
+            <div class="metric reveal">
+              <strong>IoT Dashboard</strong>
+              <span>Clear UI for sensor data & actions</span>
+              <div class="meter" aria-hidden="true"><div style="width: 70%"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2) Project Overview -->
+      <section id="overview">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="kicker"><span class="dot"></span> 2. Project Overview</span>
+              <h2 style="margin-top: 12px">Smarter irrigation, healthier crops</h2>
+              <p>
+                Smart AgroTech monitors soil moisture and controls irrigation based on real-time
+                conditions. The goal is to avoid over-watering and under-watering by combining IoT
+                sensors, a microcontroller, and a user-friendly dashboard.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid cols-3">
+            <div class="card reveal">
+              <div class="shine"></div>
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 2c4 4 6 7 6 10a6 6 0 1 1-12 0c0-3 2-6 6-10Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <h3>Water Efficiency</h3>
+              <p>Only irrigate when needed, reducing water usage and improving sustainability.</p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M4 12a8 8 0 1 0 16 0A8 8 0 0 0 4 12Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M8 13l2 2 6-6"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <h3>Better Decisions</h3>
+              <p>Use live readings to decide irrigation timing instead of fixed schedules.</p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M7 7h10v10H7z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M3 12h4M17 12h4M12 3v4M12 17v4"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <h3>IoT Ready</h3>
+              <p>Scalable architecture: sensors → controller → cloud/dashboard → control.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3) Problem Statement -->
+      <section id="problem">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="kicker"><span class="dot"></span> 3. Problem Statement</span>
+              <h2 style="margin-top: 12px">Traditional irrigation wastes water</h2>
+              <p>
+                Many farms use manual irrigation or fixed schedules, which do not consider changing
+                soil conditions. This leads to water wastage, uneven crop growth, higher electricity
+                consumption, and unnecessary labor.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid cols-2">
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Key issues</h3>
+              <p class="muted" style="margin-top: 10px">
+                - Over-watering and under-watering<br />
+                - Lack of real-time monitoring<br />
+                - Manual workload and delayed decisions<br />
+                - Electricity usage due to inefficient pumping
+              </p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Impact</h3>
+              <p class="muted" style="margin-top: 10px">
+                - Reduced yield due to inconsistent moisture<br />
+                - Soil nutrient loss (leaching) from excess water<br />
+                - Increased operational costs for farmers<br />
+                - Unsustainable water management
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4) Proposed Solution -->
+      <section id="solution">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="kicker"><span class="dot"></span> 4. Proposed Solution</span>
+              <h2 style="margin-top: 12px">Automate irrigation using IoT</h2>
+              <p>
+                The system collects soil moisture data, compares it with a threshold, and then turns
+                the pump ON/OFF accordingly. A dashboard displays readings and allows manual override.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid cols-3">
+            <div class="card reveal">
+              <div class="shine"></div>
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 4v16"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M7 9a5 5 0 0 0 10 0"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M8 19h8"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <h3>Sense</h3>
+              <p>Read soil moisture via sensor and convert to a usable percentage.</p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 2 2 7l10 5 10-5-10-5Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M2 17l10 5 10-5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M2 12l10 5 10-5"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <h3>Decide</h3>
+              <p>Compare values with threshold and decide pump action automatically.</p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M8 12h8"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M10 8l-4 4 4 4"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M14 8l4 4-4 4"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <h3>Act</h3>
+              <p>Control the pump/relay and show status in the dashboard for users.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5) Objectives -->
+      <section id="objectives">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="kicker"><span class="dot"></span> 5. Objectives</span>
+              <h2 style="margin-top: 12px">Clear goals for a practical system</h2>
+              <p>
+                The project focuses on making irrigation efficient, easy to monitor, and easy to
+                control.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid cols-2">
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Primary objectives</h3>
+              <p class="muted" style="margin-top: 10px">
+                - Monitor soil moisture in real-time<br />
+                - Automate irrigation based on threshold values<br />
+                - Reduce water and electricity consumption<br />
+                - Provide a simple UI for monitoring and control
+              </p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Secondary objectives</h3>
+              <p class="muted" style="margin-top: 10px">
+                - Enable manual override for safety and flexibility<br />
+                - Improve crop yield with consistent moisture<br />
+                - Create a scalable design for future sensors and analytics
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6) Features -->
+      <section id="features">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="kicker"><span class="dot"></span> 6. Features of the Product</span>
+              <h2 style="margin-top: 12px">Modern features with a practical focus</h2>
+              <p>
+                Key features designed for real-world use and a strong project presentation.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid cols-3">
+            <div class="card reveal">
+              <div class="shine"></div>
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 3c3 4 5 7 5 9a5 5 0 0 1-10 0c0-2 2-5 5-9Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M7 21h10"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <h3>Moisture-based Control</h3>
+              <p>Turns irrigation ON only when soil is below the set moisture threshold.</p>
+            </div>
+
+            <div class="card reveal">
+              <div class="shine"></div>
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M4 14a8 8 0 0 1 16 0v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4Z"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M12 10v4"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M10 12h4"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <h3>Manual Override</h3>
+              <p>Allow users to turn pump ON/OFF from the dashboard for safety & control.</p>
+            </div>
+
+            <div class="card reveal">
+              <div class="shine"></div>
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M4 6h16M4 12h10M4 18h16"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <h3>Simple Dashboard</h3>
+              <p>Clean UI showing moisture %, status, and recent logs for demonstration.</p>
+            </div>
+
+            <div class="card reveal">
+              <div class="shine"></div>
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 3v18"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M7 8h10M7 16h10"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </div>
+              <h3>Threshold Settings</h3>
+              <p>Supports a configurable moisture threshold for different crops/soil types.</p>
+            </div>
+
+            <div class="card reveal">
+              <div class="shine"></div>
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M7 17a5 5 0 0 1 0-10h10a4 4 0 0 1 0 8H9"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <h3>IoT Connectivity</h3>
+              <p>Designed for cloud publishing (e.g., MQTT/HTTP) and mobile viewing.</p>
+            </div>
+
+            <div class="card reveal">
+              <div class="shine"></div>
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M12 2a10 10 0 1 0 10 10"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M12 6v6l4 2"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </div>
+              <h3>Timely Irrigation</h3>
+              <p>Reduces delays by reacting instantly to moisture changes.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7) System Design -->
+      <section id="design">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="kicker"><span class="dot"></span> 7. System Design</span>
+              <h2 style="margin-top: 12px">Diagram-style architecture</h2>
+              <p>
+                A high-level view of how data flows from soil sensors to pump control and the user
+                interface.
+              </p>
+            </div>
+          </div>
+
+          <div class="diagram">
+            <div class="node reveal">
+              <div class="shine"></div>
+              <h3>Soil Moisture Sensor</h3>
+              <p>Measures moisture in soil and sends analog/digital value to controller.</p>
+              <div class="divider"></div>
+              <p class="tiny">Example: Capacitive sensor (stable & long-lasting)</p>
+            </div>
+
+            <div class="diagram-mid">
+              <div class="connector reveal" aria-hidden="true"></div>
+              <div class="node reveal">
+                <div class="shine"></div>
+                <h3>Microcontroller (ESP / Arduino)</h3>
+                <p>Reads sensor, applies logic, updates dashboard, controls relay module.</p>
+                <div class="chip-row" style="margin-top: 12px">
+                  <span class="chip">Read</span>
+                  <span class="chip">Process</span>
+                  <span class="chip">Control</span>
+                </div>
+              </div>
+              <div class="connector rev reveal" aria-hidden="true"></div>
+            </div>
+
+            <div class="node reveal">
+              <div class="shine"></div>
+              <h3>Relay + Water Pump</h3>
+              <p>Relay acts as a switch to turn pump ON/OFF based on controller decision.</p>
+              <div class="divider"></div>
+              <p class="tiny">Pump status also shown on dashboard</p>
+            </div>
+          </div>
+
+          <div class="grid cols-2" style="margin-top: 16px">
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Connectivity Layer</h3>
+              <p class="muted" style="margin-top: 10px">
+                - Wi‑Fi connectivity<br />
+                - Publish sensor values to dashboard (cloud/local)<br />
+                - Optional alerts/notifications
+              </p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>User Interface</h3>
+              <p class="muted" style="margin-top: 10px">
+                - Real-time values & indicators<br />
+                - Manual override controls<br />
+                - Logs for demonstration and debugging
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8) Working / Methodology -->
+      <section id="working">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="kicker"><span class="dot"></span> 8. Working / Methodology</span>
+              <h2 style="margin-top: 12px">Step-by-step workflow</h2>
+              <p>How the system behaves from sensing to irrigation control and monitoring.</p>
+            </div>
+          </div>
+
+          <div class="steps">
+            <div class="step reveal">
+              <div class="step-num">1</div>
+              <div>
+                <h3>Sense moisture</h3>
+                <p>Sensor measures soil moisture continuously and sends readings to controller.</p>
+              </div>
+            </div>
+            <div class="step reveal">
+              <div class="step-num">2</div>
+              <div>
+                <h3>Convert & filter</h3>
+                <p>Controller converts raw sensor value into percentage and smooths noisy data.</p>
+              </div>
+            </div>
+            <div class="step reveal">
+              <div class="step-num">3</div>
+              <div>
+                <h3>Apply decision logic</h3>
+                <p>Compare moisture value with threshold to decide whether irrigation is required.</p>
+              </div>
+            </div>
+            <div class="step reveal">
+              <div class="step-num">4</div>
+              <div>
+                <h3>Control pump via relay</h3>
+                <p>Relay activates pump for watering or turns it OFF when moisture becomes enough.</p>
+              </div>
+            </div>
+            <div class="step reveal">
+              <div class="step-num">5</div>
+              <div>
+                <h3>Update dashboard</h3>
+                <p>Dashboard shows readings, pump status, and logs for monitoring and demo.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9) Algorithm -->
+      <section id="algorithm">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="kicker"><span class="dot"></span> 9. Algorithm (Simple Steps)</span>
+              <h2 style="margin-top: 12px">Easy to understand logic</h2>
+              <p>Beginner-friendly algorithm description for reports and presentations.</p>
+            </div>
+          </div>
+
+          <div class="grid cols-2">
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Algorithm steps</h3>
+              <p class="muted" style="margin-top: 10px">
+                1. Read soil moisture sensor value<br />
+                2. Convert to moisture percentage<br />
+                3. If moisture &lt; threshold → turn pump ON<br />
+                4. Else → turn pump OFF<br />
+                5. Display moisture & pump status on dashboard<br />
+                6. Repeat at fixed interval
+              </p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Notes</h3>
+              <p class="muted" style="margin-top: 10px">
+                - Add a small delay to avoid frequent switching (optional)<br />
+                - Allow manual override from UI<br />
+                - Log changes for monitoring and debugging
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10) Live Dashboard -->
+      <section id="dashboard">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="kicker"><span class="dot"></span> 10. Live Dashboard UI</span>
+              <h2 style="margin-top: 12px">Fake sensor data (for frontend demo)</h2>
+              <p>
+                This dashboard simulates soil moisture readings and pump status. Use ON/OFF buttons
+                to toggle the pump in the UI (no backend required).
+              </p>
+            </div>
+          </div>
+
+          <div class="dash">
+            <div class="dash-panel reveal">
+              <div class="dash-top">
+                <div>
+                  <h3>Farm Monitoring Panel</h3>
+                  <p class="tiny" style="margin: 6px 0 0">Updated every 2 seconds</p>
+                </div>
+                <div class="status-pill" id="pumpPill" aria-live="polite">
+                  <span class="status-dot" aria-hidden="true"></span>
+                  <span id="pumpText">PUMP: OFF</span>
+                </div>
+              </div>
+
+              <div class="dash-body">
+                <div class="reading-row">
+                  <div class="reading">
+                    <div class="label">Soil Moisture</div>
+                    <div class="value">
+                      <span id="moistureValue">--</span><span style="font-size: 16px">%</span>
+                    </div>
+                    <div class="sub">
+                      Threshold: <strong id="thresholdLabel">35%</strong>
+                    </div>
+                    <div class="gauge" aria-hidden="true">
+                      <div id="moistureBar"></div>
+                    </div>
+                  </div>
+                  <div class="reading">
+                    <div class="label">Irrigation Recommendation</div>
+                    <div class="value" style="font-size: 18px; letter-spacing: 0" id="recommendation">
+                      --
+                    </div>
+                    <div class="sub" id="ruleText">Rule: moisture &lt; threshold → pump ON</div>
+                    <div class="divider"></div>
+                    <div class="tiny" id="lastUpdated">Last updated: --</div>
+                  </div>
+                </div>
+
+                <div class="dash-controls">
+                  <button class="btn mini success" id="pumpOnBtn">Turn Pump ON</button>
+                  <button class="btn mini danger" id="pumpOffBtn">Turn Pump OFF</button>
+                  <button class="btn mini" id="autoBtn" aria-pressed="true">Auto Mode: ON</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="dash-panel reveal">
+              <div class="dash-top">
+                <div>
+                  <h3>Activity Log</h3>
+                  <p class="tiny" style="margin: 6px 0 0">Useful for project demonstration</p>
+                </div>
+                <button class="btn mini" id="clearLogBtn">Clear</button>
+              </div>
+              <div class="dash-body">
+                <div class="dash-log" id="log" aria-label="Dashboard log"></div>
+                <div class="card" style="padding: 14px">
+                  <div class="shine"></div>
+                  <h3 style="font-size: 14px">How to present this</h3>
+                  <p class="tiny" style="margin-top: 8px">
+                    Explain that values are random for the frontend demo, but the UI matches a real
+                    IoT dashboard. In real hardware, readings come from the sensor via controller and
+                    are published to the UI.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 11) Use Cases / Applications -->
+      <section id="usecases">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="kicker"><span class="dot"></span> 11. Use Cases / Applications</span>
+              <h2 style="margin-top: 12px">Where this system can be used</h2>
+              <p>
+                Smart irrigation is applicable across multiple agricultural and plantation scenarios.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid cols-3">
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Small Farms</h3>
+              <p>Affordable irrigation automation for daily farm operations.</p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Greenhouses</h3>
+              <p>Controlled environment irrigation for nursery and greenhouse plants.</p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Gardens & Lawns</h3>
+              <p>Home automation for watering gardens and lawns based on soil conditions.</p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Plantations</h3>
+              <p>Large-scale irrigation where water saving and scheduling are critical.</p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Research & Academics</h3>
+              <p>Useful for IoT labs, agriculture research, and college demonstrations.</p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Smart Villages</h3>
+              <p>Community-level solutions for better water management and farming practices.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 12) Future Scope -->
+      <section id="future">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="kicker"><span class="dot"></span> 12. Future Scope</span>
+              <h2 style="margin-top: 12px">Improvements for next versions</h2>
+              <p>
+                Extensions that can make the system smarter, more reliable, and more scalable.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid cols-2">
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>More sensors</h3>
+              <p class="muted" style="margin-top: 10px">
+                - Temperature and humidity<br />
+                - Rain detection<br />
+                - Light intensity (sunlight)
+              </p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Smarter logic</h3>
+              <p class="muted" style="margin-top: 10px">
+                - Crop-specific moisture profiles<br />
+                - Weather-based prediction<br />
+                - Machine learning-based scheduling
+              </p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Remote alerts</h3>
+              <p class="muted" style="margin-top: 10px">
+                - SMS / app notifications<br />
+                - Fault alerts for sensor failure or pump issues<br />
+                - Daily/weekly report generation
+              </p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Cloud + data analytics</h3>
+              <p class="muted" style="margin-top: 10px">
+                - Historical graphs and trends<br />
+                - Multi-farm dashboards<br />
+                - Data export for research
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 13) Conclusion -->
+      <section id="conclusion">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <span class="kicker"><span class="dot"></span> 13. Conclusion</span>
+              <h2 style="margin-top: 12px">A practical and impactful IoT solution</h2>
+              <p>
+                Smart AgroTech provides an efficient, automated irrigation approach by monitoring soil
+                moisture and controlling irrigation accordingly. This helps conserve water, reduces
+                manual work, and supports healthier crop growth.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid cols-2">
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Key takeaway</h3>
+              <p class="muted" style="margin-top: 10px">
+                Real-time sensing + simple decision logic can make irrigation more sustainable and
+                affordable, especially for small and medium farms.
+              </p>
+            </div>
+            <div class="card reveal">
+              <div class="shine"></div>
+              <h3>Project value</h3>
+              <p class="muted" style="margin-top: 10px">
+                The architecture is easy to demonstrate in college submissions and can be extended to
+                a full hardware + cloud solution.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 14) Footer -->
+    <footer id="footer">
+      <div class="container footer-grid">
+        <div class="footer-card reveal">
+          <span class="kicker"><span class="dot"></span> Smart AgroTech</span>
+          <h2 style="margin-top: 12px; font-size: 22px">IoT Based Smart Irrigation System</h2>
+          <p>
+            Frontend demonstration website built with HTML, CSS, and JavaScript. Includes smooth
+            navigation, animations, and a simulated dashboard for sensor data and pump control.
+          </p>
+          <div class="btn-row">
+            <a class="btn primary" href="#top">Back to Top</a>
+            <a class="btn" href="#dashboard">Dashboard</a>
+          </div>
+          <p class="tiny">
+            Tip: Replace footer details with your department/college name and team members.
+          </p>
+        </div>
+
+        <div class="footer-card reveal">
+          <h3 style="font-size: 16px">Project Details</h3>
+          <p class="tiny" style="margin-top: 10px">
+            <strong>Title:</strong> Smart AgroTech: IoT Based Smart Irrigation System<br />
+            <strong>Domain:</strong> IoT + Agriculture<br />
+            <strong>Theme:</strong> Green, clean, responsive UI<br />
+            <strong>Note:</strong> Dashboard shows random demo values (UI only)
+          </p>
+          <div class="divider"></div>
+          <p class="tiny">
+            © <span id="year"></span> Smart AgroTech • Built for college project submission
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // -----------------------------
+      // Helpers
+      // -----------------------------
+      const $ = (sel) => document.querySelector(sel);
+      const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+      const fmtTime = (d) =>
+        d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+      // -----------------------------
+      // Mobile menu (drawer)
+      // -----------------------------
+      const nav = document.querySelector(".nav");
+      const menuBtn = $("#menuBtn");
+      const closeMobileMenu = () => {
+        nav.classList.remove("is-open");
+        menuBtn.setAttribute("aria-expanded", "false");
+        menuBtn.setAttribute("aria-label", "Open menu");
+      };
+      const toggleMobileMenu = () => {
+        const isOpen = nav.classList.toggle("is-open");
+        menuBtn.setAttribute("aria-expanded", String(isOpen));
+        menuBtn.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+      };
+
+      menuBtn?.addEventListener("click", toggleMobileMenu);
+      document.querySelectorAll(".mobile-drawer a").forEach((a) => {
+        a.addEventListener("click", closeMobileMenu);
+      });
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeMobileMenu();
+      });
+
+      // -----------------------------
+      // Reveal on scroll (IntersectionObserver)
+      // -----------------------------
+      const reveals = Array.from(document.querySelectorAll(".reveal"));
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("in");
+              io.unobserve(entry.target);
+            }
+          }
+        },
+        { threshold: 0.12 }
+      );
+      reveals.forEach((el) => io.observe(el));
+
+      // -----------------------------
+      // Live Dashboard (fake sensor values)
+      // -----------------------------
+      const moistureValueEl = $("#moistureValue");
+      const moistureBarEl = $("#moistureBar");
+      const pumpTextEl = $("#pumpText");
+      const pumpPillEl = $("#pumpPill");
+      const recommendationEl = $("#recommendation");
+      const lastUpdatedEl = $("#lastUpdated");
+      const thresholdLabelEl = $("#thresholdLabel");
+      const logEl = $("#log");
+
+      const pumpOnBtn = $("#pumpOnBtn");
+      const pumpOffBtn = $("#pumpOffBtn");
+      const autoBtn = $("#autoBtn");
+      const clearLogBtn = $("#clearLogBtn");
+
+      const state = {
+        pumpOn: false,
+        autoMode: true,
+        moisture: 42,
+        threshold: 35,
+        timer: null,
+      };
+
+      const log = (message) => {
+        const line = document.createElement("p");
+        line.className = "log-line";
+        line.innerHTML = `<span class="t">[${fmtTime(new Date())}]</span> ${message}`;
+        logEl.prepend(line);
+
+        // Keep log short and tidy.
+        while (logEl.children.length > 18) logEl.removeChild(logEl.lastChild);
+      };
+
+      const setPump = (on, reason = "Manual") => {
+        state.pumpOn = on;
+        pumpTextEl.textContent = `PUMP: ${on ? "ON" : "OFF"}`;
+        pumpPillEl.classList.toggle("on", on);
+        log(`${reason}: Pump turned <strong>${on ? "ON" : "OFF"}</strong>.`);
+      };
+
+      const setAutoMode = (on) => {
+        state.autoMode = on;
+        autoBtn.setAttribute("aria-pressed", String(on));
+        autoBtn.textContent = `Auto Mode: ${on ? "ON" : "OFF"}`;
+        log(`Auto mode set to <strong>${on ? "ON" : "OFF"}</strong>.`);
+      };
+
+      const decidePumpFromMoisture = () => {
+        const shouldPumpBeOn = state.moisture < state.threshold;
+        recommendationEl.textContent = shouldPumpBeOn ? "Irrigate Now" : "No Irrigation Needed";
+
+        if (state.autoMode) {
+          if (shouldPumpBeOn !== state.pumpOn) {
+            setPump(shouldPumpBeOn, "Auto");
+          }
+        }
+      };
+
+      const updateMoistureUI = () => {
+        moistureValueEl.textContent = String(state.moisture);
+        moistureBarEl.style.width = `${clamp(state.moisture, 0, 100)}%`;
+        thresholdLabelEl.textContent = `${state.threshold}%`;
+        lastUpdatedEl.textContent = `Last updated: ${fmtTime(new Date())}`;
+      };
+
+      const nextMoistureValue = () => {
+        // Create natural-looking changes (small random drift).
+        const drift = Math.round((Math.random() * 10 - 5) * 1); // -5..+5
+        const base = state.moisture + drift;
+        const noise = Math.random() < 0.12 ? (Math.random() < 0.5 ? -8 : +8) : 0;
+        return clamp(base + noise, 10, 95);
+      };
+
+      const tick = () => {
+        state.moisture = nextMoistureValue();
+        updateMoistureUI();
+        decidePumpFromMoisture();
+
+        const note =
+          state.moisture < state.threshold
+            ? `Moisture ${state.moisture}% is below threshold (${state.threshold}%).`
+            : `Moisture ${state.moisture}% is above threshold (${state.threshold}%).`;
+        log(note);
+      };
+
+      pumpOnBtn.addEventListener("click", () => setPump(true, "Manual"));
+      pumpOffBtn.addEventListener("click", () => setPump(false, "Manual"));
+      autoBtn.addEventListener("click", () => setAutoMode(!state.autoMode));
+      clearLogBtn.addEventListener("click", () => {
+        logEl.innerHTML = "";
+        log("Log cleared.");
+      });
+
+      // Start
+      $("#year").textContent = String(new Date().getFullYear());
+      updateMoistureUI();
+      log("Dashboard initialized (demo values).");
+      decidePumpFromMoisture();
+      state.timer = window.setInterval(tick, 2000);
+
+      // Close drawer if resizing to desktop.
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 980) closeMobileMenu();
+      });
+    </script>
+  </body>
+</html>
+
